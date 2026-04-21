@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<!--
+  Unblocked Browser — pure HTML single-file fallback.
+  No server required. Open this file directly in a browser.
+
+  LIMITATION: Sites that send `X-Frame-Options: DENY/SAMEORIGIN` or a strict
+  `Content-Security-Policy: frame-ancestors` (Google, YouTube, Instagram, etc.)
+  CANNOT be embedded in an iframe by design of the browser. This file uses
+  a public CORS proxy (corsproxy.io) to try to sanitize those headers, but
+  results vary. For a truly "works on anything" experience, use the Node
+  server version (`npm start`) which includes the Ultraviolet proxy.
+-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Unblocked Browser (standalone)</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%234f46e5'/%3E%3Ctext x='32' y='42' font-size='32' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E2%88%9E%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root { --bg:#0f1115; --surface:#181b22; --surface-2:#232835; --border:#2a2f3c;
+      --text:#e6e8ee; --muted:#8a93a6; --accent:#6366f1; --accent-2:#8b5cf6; }
+    * { box-sizing: border-box; }
+    html, body { margin:0; height:100%; background:var(--bg); color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; overflow:hidden; }
+    header { display:flex; align-items:center; gap:6px; padding:10px 12px;
+      background:#0b0d12; border-bottom:1px solid var(--border); }
+    header button { background:transparent; color:var(--text); border:1px solid transparent;
+      width:34px; height:34px; border-radius:8px; font-size:14px; cursor:pointer; }
+    header button:hover { background:rgba(255,255,255,.06); }
+    form { flex:1; display:flex; gap:8px; }
+    input { flex:1; background:#0f1115; border:1px solid var(--border); color:var(--text);
+      border-radius:999px; padding:9px 16px; font-size:13px; outline:none; }
+    input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(99,102,241,.25); }
+    select { background:#0f1115; border:1px solid var(--border); color:var(--text);
+      border-radius:8px; padding:8px; font-size:12px; }
+    main { position:relative; height:calc(100vh - 56px); }
+    .page { position:absolute; inset:0; overflow:auto; }
+    .page.hidden { display:none; }
+    #frame-host { background:#fff; }
+    iframe { width:100%; height:100%; border:0; background:#fff; }
+    .home { padding:7vh 24px; text-align:center; max-width:820px; margin:0 auto; }
+    h1 { font-size:56px; margin:0 0 8px; letter-spacing:-1px;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .tagline { color:var(--muted); margin:0 0 28px; }
+    #go-form { display:flex; gap:8px; max-width:620px; margin:0 auto; }
+    #go-form input { padding:14px 20px; font-size:15px; }
+    #go-form button { background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      border:none; color:#fff; border-radius:999px; padding:0 24px; font-weight:600;
+      font-size:15px; cursor:pointer; }
+    .shortcuts { display:grid; grid-template-columns:repeat(6,minmax(0,1fr));
+      gap:14px; margin:40px auto 0; max-width:620px; }
+    .sc { display:flex; flex-direction:column; align-items:center; gap:8px;
+      padding:14px 6px; border-radius:14px; color:var(--text); text-decoration:none;
+      font-size:12px; background:var(--surface); border:1px solid var(--border);
+      cursor:pointer; }
+    .sc:hover { background:var(--surface-2); }
+    .sc .ic { width:40px; height:40px; border-radius:12px; display:grid;
+      place-items:center; font-weight:700; color:#fff; }
+    .g { background:#4285F4; } .y { background:#FF0000; } .w { background:#000; }
+    .r { background:#FF4500; } .d { background:#de5833; } .gh { background:#24292e; }
+    .note { color:var(--muted); margin-top:36px; font-size:12px; max-width:620px;
+      margin-left:auto; margin-right:auto; line-height:1.6; }
+    @media (max-width:640px){ .shortcuts{grid-template-columns:repeat(3,1fr);} h1{font-size:40px;} }
+  </style>
+</head>
+<body>
+  <header>
+    <button id="back" title="Back">◀</button>
+    <button id="forward" title="Forward">▶</button>
+    <button id="reload" title="Reload">⟳</button>
+    <button id="home" title="Home">⌂</button>
+    <form id="omni">
+      <input id="addr" placeholder="Search Google or type a URL" autocomplete="off" spellcheck="false" />
+    </form>
+    <select id="mode" title="Proxy mode">
+      <option value="direct">Direct (iframe)</option>
+      <option value="cors" selected>Via CORS proxy</option>
+    </select>
+  </header>
+
+  <main>
+    <section id="home-page" class="page">
+      <div class="home">
+        <h1>Unblocked Browser</h1>
+        <p class="tagline">Pure HTML edition — open this file anywhere, no server needed.</p>
+        <form id="go-form">
+          <input id="go-q" placeholder="Search Google or type a URL" autofocus />
+          <button type="submit">Go</button>
+        </form>
+        <div class="shortcuts">
+          <a class="sc" data-url="https://www.google.com/search?igu=1&q=" data-search="true"><div class="ic g">G</div><span>Google</span></a>
+          <a class="sc" data-url="https://duckduckgo.com/?q=" data-search="true"><div class="ic d">🦆</div><span>DuckDuckGo</span></a>
+          <a class="sc" data-url="https://www.wikipedia.org"><div class="ic w">W</div><span>Wikipedia</span></a>
+          <a class="sc" data-url="https://www.reddit.com"><div class="ic r">r</div><span>Reddit</span></a>
+          <a class="sc" data-url="https://www.youtube.com"><div class="ic y">▶</div><span>YouTube</span></a>
+          <a class="sc" data-url="https://github.com"><div class="ic gh">⌘</div><span>GitHub</span></a>
+        </div>
+        <p class="note">
+          Heads up: major sites like Google and YouTube send anti-framing headers,
+          so embedding them in an iframe won't always work from a static HTML file —
+          browsers block it for security. Use the Node server version (<code>npm start</code>)
+          for a truly universal proxy. "Google search" shortcut uses <code>igu=1</code>
+          which Google normally allows to be framed.
+        </p>
+      </div>
+    </section>
+    <section id="frame-host" class="page hidden">
+      <iframe id="frame"
+        allow="clipboard-read; clipboard-write; fullscreen; autoplay; camera; microphone; geolocation; payment"
+        allowfullscreen sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-modals allow-downloads allow-pointer-lock allow-top-navigation-by-user-activation">
+      </iframe>
+    </section>
+  </main>
+
+  <script>
+    const CORS = 'https://corsproxy.io/?';
+    const addr = document.getElementById('addr');
+    const mode = document.getElementById('mode');
+    const frame = document.getElementById('frame');
+    const home = document.getElementById('home-page');
+    const host = document.getElementById('frame-host');
+    const omni = document.getElementById('omni');
+    const goForm = document.getElementById('go-form');
+    const goQ = document.getElementById('go-q');
+
+    const history = [];
+    let historyIndex = -1;
+
+    function resolve(input) {
+      const raw = input.trim();
+      if (!raw) return null;
+      try { return new URL(raw).toString(); } catch {}
+      if (/^[^\s]+\.[^\s]+/.test(raw) && !raw.includes(' ')) return 'https://' + raw;
+      return 'https://www.google.com/search?igu=1&q=' + encodeURIComponent(raw);
+    }
+    function frameUrl(url) {
+      return mode.value === 'cors' ? CORS + encodeURIComponent(url) : url;
+    }
+    function showHome() {
+      home.classList.remove('hidden'); host.classList.add('hidden'); addr.value = '';
+    }
+    function showFrame() { home.classList.add('hidden'); host.classList.remove('hidden'); }
+
+    function go(input, { push = true } = {}) {
+      const url = typeof input === 'string' && /^https?:/.test(input) ? input : resolve(input);
+      if (!url) return;
+      frame.src = frameUrl(url);
+      addr.value = url;
+      showFrame();
+      if (push) { history.splice(historyIndex + 1); history.push(url); historyIndex = history.length - 1; }
+    }
+
+    omni.addEventListener('submit', e => { e.preventDefault(); if (addr.value) go(addr.value); });
+    goForm.addEventListener('submit', e => { e.preventDefault(); if (goQ.value) go(goQ.value); });
+    document.querySelectorAll('.sc').forEach(el => {
+      el.addEventListener('click', () => {
+        const u = el.dataset.url;
+        if (el.dataset.search) go(u + (prompt('Search query?', '') || ''));
+        else go(u);
+      });
+    });
+    document.getElementById('back').addEventListener('click', () => {
+      if (historyIndex > 0) { historyIndex--; go(history[historyIndex], { push: false }); }
+    });
+    document.getElementById('forward').addEventListener('click', () => {
+      if (historyIndex < history.length - 1) { historyIndex++; go(history[historyIndex], { push: false }); }
+    });
+    document.getElementById('reload').addEventListener('click', () => { frame.src = frame.src; });
+    document.getElementById('home').addEventListener('click', showHome);
+    mode.addEventListener('change', () => { if (history[historyIndex]) go(history[historyIndex], { push: false }); });
+    document.addEventListener('keydown', e => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'l') { e.preventDefault(); addr.focus(); addr.select(); }
+    });
+  </script>
+</body>
+</html>

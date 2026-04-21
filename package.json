@@ -1,0 +1,25 @@
+{
+  "name": "unblocked-browser",
+  "version": "1.0.0",
+  "description": "A fully functional web browser with unrestricted access, powered by Ultraviolet.",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["browser", "proxy", "ultraviolet", "unblocker"],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@mercuryworkshop/bare-as-module3": "^2.2.4",
+    "@mercuryworkshop/bare-mux": "^2.0.12",
+    "@mercuryworkshop/epoxy-transport": "^2.1.21",
+    "@titaniumnetwork-dev/ultraviolet": "^3.2.10",
+    "@tomphttp/bare-server-node": "^2.0.4",
+    "express": "^4.19.2",
+    "ultraviolet-static": "^1.1.1"
+  }
+}
