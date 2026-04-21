@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Unblocked Browser</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%234f46e5'/%3E%3Ctext x='32' y='42' font-size='32' text-anchor='middle' fill='white' font-family='sans-serif'%3E%E2%88%9E%3C/text%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/index.css" />
+  </head>
+  <body>
+    <header class="chrome">
+      <div class="tabs">
+        <div class="tab active" data-tab-id="home"><span class="tab-title">New Tab</span><button class="tab-close" title="Close">×</button></div>
+        <button id="new-tab" title="New tab">+</button>
+      </div>
+      <div class="toolbar">
+        <button id="back" title="Back">◀</button>
+        <button id="forward" title="Forward">▶</button>
+        <button id="reload" title="Reload">⟳</button>
+        <button id="home" title="Home">⌂</button>
+        <form id="omnibox" autocomplete="off">
+          <input
+            id="address"
+            type="text"
+            placeholder="Search Google or type a URL"
+            spellcheck="false"
+            autocapitalize="off"
+            autocorrect="off"
+          />
+        </form>
+      </div>
+    </header>
+
+    <main>
+      <section id="home-page" class="page">
+        <div class="hero">
+          <h1>Unblocked Browser</h1>
+          <p class="tagline">A fully functional browser — search, stream, scroll. Anywhere.</p>
+          <form id="home-form">
+            <input
+              id="home-query"
+              type="text"
+              placeholder="Search Google or type a URL"
+              spellcheck="false"
+              autocapitalize="off"
+              autocorrect="off"
+              autofocus
+            />
+            <button type="submit">Go</button>
+          </form>
+          <div class="shortcuts">
+            <a class="shortcut" data-url="https://www.google.com"><div class="icon g">G</div><span>Google</span></a>
+            <a class="shortcut" data-url="https://www.youtube.com"><div class="icon y">▶</div><span>YouTube</span></a>
+            <a class="shortcut" data-url="https://www.wikipedia.org"><div class="icon w">W</div><span>Wikipedia</span></a>
+            <a class="shortcut" data-url="https://www.reddit.com"><div class="icon r">r</div><span>Reddit</span></a>
+            <a class="shortcut" data-url="https://www.duckduckgo.com"><div class="icon d">🦆</div><span>DuckDuckGo</span></a>
+            <a class="shortcut" data-url="https://github.com"><div class="icon gh">⌘</div><span>GitHub</span></a>
+          </div>
+          <p class="hint">Tip: press <kbd>Ctrl</kbd>+<kbd>L</kbd> to focus the address bar, <kbd>Ctrl</kbd>+<kbd>T</kbd> for a new tab.</p>
+        </div>
+      </section>
+
+      <section id="frames" class="page hidden"></section>
+
+      <section id="error-page" class="page hidden">
+        <div class="err">
+          <h2>Something went wrong</h2>
+          <pre id="error-text"></pre>
+          <button id="err-back">Back to home</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Ultraviolet bundle + bare-mux client -->
+    <script src="/uv/uv.bundle.js"></script>
+    <script src="/uv/uv.config.js"></script>
+    <script src="/baremux/index.js"></script>
+    <script src="/index.js" type="module"></script>
+  </body>
+</html>
