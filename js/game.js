@@ -238,7 +238,7 @@ export class Game {
     }
     for (const aura of this.towers) {
       if (aura.def.archetype !== 'aura') continue;
-      const r = aura.def.range;
+      const r = aura.range;
       for (const t of this.towers) {
         if (t === aura) continue;
         if (t.def.archetype === 'aura' || t.def.archetype === 'econ') continue;
@@ -659,7 +659,7 @@ export class Game {
           this.fx.push(new FX('explosion', { x: proj.x, y: proj.y, radius: tower.splash, color, duration: 260 }));
           if (arche === 'flame') {
             for (const h of hits) {
-              if (h.enemy.alive) h.enemy.applyBurn(tower.burnDps, tower.burnDur, now);
+              if (h.enemy.alive) h.enemy.applyBurn(tower.burnDps, tower.burnDur, ts);
             }
           }
           applyHit(proj, enemies, ts, hits);
@@ -675,7 +675,7 @@ export class Game {
           for (const e of this.enemies) {
             if (!e.alive) continue;
             const d = Math.hypot(e.x - proj.x, e.y - proj.y);
-            if (d <= r) e.applySlow(tower.slow, tower.slowDur, now);
+            if (d <= r) e.applySlow(tower.slow, tower.slowDur, ts);
           }
           applyHit(proj, enemies, ts, hits);
         },
@@ -690,7 +690,7 @@ export class Game {
           for (const e of this.enemies) {
             if (!e.alive) continue;
             const d = Math.hypot(e.x - proj.x, e.y - proj.y);
-            if (d <= r) e.applyPoison(tower.poisonDps, tower.poisonDur, now);
+            if (d <= r) e.applyPoison(tower.poisonDps, tower.poisonDur, ts);
           }
           applyHit(proj, enemies, ts, hits);
         },
