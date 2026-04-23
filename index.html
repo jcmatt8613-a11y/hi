@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tower Rush Defense</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Main Menu -->
+    <div id="menu-screen" class="screen active">
+      <div class="menu-card">
+        <h1 class="title">Tower Rush <span>Defense</span></h1>
+        <p class="tagline">Place towers. Crush waves. Survive the bosses.</p>
+        <div class="menu-buttons">
+          <button id="btn-start" class="primary-btn">Start Game</button>
+          <button id="btn-how" class="secondary-btn">How to Play</button>
+          <button id="btn-credits" class="secondary-btn">Credits</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How to Play -->
+    <div id="how-screen" class="screen">
+      <div class="menu-card">
+        <h2>How to Play</h2>
+        <ul class="howto">
+          <li>Click a tower in the shop, then click any non-path tile to place it.</li>
+          <li>Towers automatically shoot enemies that enter their range.</li>
+          <li>Earn money by defeating enemies; stronger enemies pay more.</li>
+          <li>Click a placed tower to see stats, upgrade it, or sell it.</li>
+          <li>Every 10th wave spawns a boss. Survive as long as you can!</li>
+          <li>Use the speed controls to fast-forward slow sections.</li>
+        </ul>
+        <button class="primary-btn back-btn" data-back="menu-screen">Back</button>
+      </div>
+    </div>
+
+    <!-- Credits -->
+    <div id="credits-screen" class="screen">
+      <div class="menu-card">
+        <h2>Credits</h2>
+        <p class="credit-line">Created by <strong>Justin Matty</strong></p>
+        <p class="credit-sub">Tower Rush Defense &mdash; A browser-based tower defense game.</p>
+        <p class="credit-sub">Built with HTML5 Canvas, CSS, and vanilla JavaScript.</p>
+        <button class="primary-btn back-btn" data-back="menu-screen">Back</button>
+      </div>
+    </div>
+
+    <!-- Game Over -->
+    <div id="gameover-screen" class="screen">
+      <div class="menu-card">
+        <h2 id="gameover-title">Defeat!</h2>
+        <p id="gameover-stats">You survived <span id="gameover-wave">0</span> waves.</p>
+        <div class="menu-buttons">
+          <button id="btn-restart" class="primary-btn">Play Again</button>
+          <button class="secondary-btn back-btn" data-back="menu-screen">Main Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Screen -->
+    <div id="game-screen" class="screen">
+      <header class="topbar">
+        <div class="stat">
+          <span class="stat-label">Wave</span>
+          <span id="stat-wave" class="stat-value">1</span>
+        </div>
+        <div class="stat health">
+          <span class="stat-label">Health</span>
+          <span id="stat-health" class="stat-value">100</span>
+        </div>
+        <div class="stat money">
+          <span class="stat-label">Money</span>
+          <span id="stat-money" class="stat-value">500</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Score</span>
+          <span id="stat-score" class="stat-value">0</span>
+        </div>
+        <div class="controls">
+          <button id="btn-speed-1" class="ctrl-btn active">1x</button>
+          <button id="btn-speed-2" class="ctrl-btn">2x</button>
+          <button id="btn-speed-3" class="ctrl-btn">4x</button>
+          <button id="btn-pause" class="ctrl-btn">Pause</button>
+          <button id="btn-mute" class="ctrl-btn">🔊</button>
+          <button id="btn-menu" class="ctrl-btn danger">Menu</button>
+        </div>
+      </header>
+
+      <main class="game-body">
+        <section class="canvas-wrap">
+          <canvas id="game-canvas" width="600" height="600"></canvas>
+          <div id="wave-banner" class="wave-banner"></div>
+          <div id="tooltip" class="tooltip"></div>
+        </section>
+
+        <aside class="sidebar">
+          <div class="shop-header">
+            <h3>Tower Shop</h3>
+            <input id="tower-search" type="search" placeholder="Search towers..." />
+          </div>
+          <div id="tower-shop" class="tower-shop"></div>
+
+          <div id="selected-panel" class="selected-panel hidden">
+            <h4 id="sel-name">Tower</h4>
+            <div id="sel-stats" class="sel-stats"></div>
+            <div class="sel-actions">
+              <button id="btn-upgrade" class="primary-btn small">Upgrade</button>
+              <button id="btn-sell" class="secondary-btn small">Sell</button>
+            </div>
+          </div>
+
+          <div class="credit-footer">Created by <strong>Justin Matty</strong></div>
+        </aside>
+      </main>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
