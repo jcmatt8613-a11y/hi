@@ -233,7 +233,7 @@ export class UI {
   showHeroPanel(hero, game) {
     this.selPanel.classList.add('hidden');
     this.heroPanel.classList.remove('hidden');
-    const now = performance.now();
+    const now = game ? game.gameTime : 0;
     const cd = hero.abilityCooldown(now);
     const def = hero.def;
     document.getElementById('hero-name').textContent = `${def.name} — Lv ${hero.level}`;
@@ -280,7 +280,7 @@ export class UI {
       </div>`;
   }
 
-  updateAbilityBar(abilityState, money) {
+  updateAbilityBar(abilityState, money, gameTime = 0) {
     if (!this.abilityBar) return;
     // Cache DOM for abilities
     if (!this._abilityEls) {
@@ -302,7 +302,7 @@ export class UI {
         this._abilityEls.set(ab.id, el);
       }
     }
-    const now = performance.now();
+    const now = gameTime;
     for (const ab of ABILITIES) {
       const el = this._abilityEls.get(ab.id);
       const cd = abilityState.cooldownRemaining(ab.id, now);

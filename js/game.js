@@ -78,6 +78,12 @@ export class Game {
     this.betweenWaveTimer = 2500;
     this.hpMult = 1;
 
+    // Cumulative in-game clock (ms). Advances by dt*1000 each tick so that
+    // cooldowns and status-effect timers track game time, not wall-clock.
+    // FX/rendering continue to use performance.now() since they should run
+    // at wall-clock rate regardless of speed multiplier.
+    this.gameTime = 0;
+
     this.abilityState = new AbilityState();
 
     this.econTimers = new Map(); // tower -> lastTickTime
@@ -344,7 +350,7 @@ export class Game {
       for (const ab of ABILITIES) {
         if (e.key.toLowerCase() === ab.hotkey) this.requestAbility(ab.id);
       }
-      if (e.key.toLowerCase() === 'h' && this.hero && this.hero.canUseAbility(performance.now())) {
+      if (e.key.toLowerCase() === 'h' && this.hero && this.hero.canUseAbility(this.gameTime)) {
         this.useHeroAbility();
       }
     });
@@ -353,8 +359,7 @@ export class Game {
   requestAbility(id) {
     const ab = ABILITIES.find(a => a.id === id);
     if (!ab) return;
-    const now = performance.now();
-    if (!this.abilityState.isReady(id, now)) { sfx.error(); return; }
+    if (!this.abilityState.isReady(id, this.gameTime)) { sfx.error(); return; }
     if (this.money < ab.cost) { sfx.error(); return; }
     if (ab.requiresTarget) {
       this.abilityState.arm(id);
@@ -366,7 +371,7 @@ export class Game {
   triggerAbility(id, x, y) {
     const ab = ABILITIES.find(a => a.id === id);
     if (!ab) return;
-    const now = performance.now();
+    const now = this.gameTime;
     if (!this.abilityState.isReady(id, now)) { sfx.error(); return; }
     if (this.money < ab.cost) { sfx.error(); return; }
     this.money -= ab.cost;
@@ -419,7 +424,7 @@ export class Game {
 
   useHeroAbility() {
     if (!this.hero) return;
-    const now = performance.now();
+    const now = this.gameTime;
     if (!this.hero.canUseAbility(now)) { sfx.error(); return; }
     this.hero.lastAbility = now;
     const abDef = this.hero.def;
@@ -469,6 +474,9 @@ export class Game {
   }
 
   update(dt, now) {
+    // Advance cumulative game clock (used for all cooldowns + status timers).
+    this.gameTime += dt * 1000;
+    const gt = this.gameTime;
     // Wave management
     if (!this.waveActive) {
       this.betweenWaveTimer -= dt * 1000;
@@ -510,7 +518,7 @@ export class Game {
       }
     }
 
-    for (const e of this.enemies) e.update(dt, now);
+    for (const e of this.enemies) e.update(dt, gt);
 
     // Handle splits (on death) and deaths
     const survivors = [];
@@ -520,7 +528,7 @@ export class Game {
         this.health -= e.type.dmg;
         this.stats.leaksThisWave += 1;
         sfx.leak();
-        if (this.health <= 0) { this.health = 0; this.endGame(false); }
+        if (this.health <= 0 && !this.gameOver) { this.health = 0; this.endGame(false); }
       } else if (!e.alive) {
         this.money += e.reward;
         this.score += e.reward;
@@ -554,14 +562,14 @@ export class Game {
 
     // Towers fire
     for (const t of this.towers) {
-      if (t.def.archetype === 'econ') this.econTick(t, dt, now);
-      else this.towerFire(t, now);
+      if (t.def.archetype === 'econ') this.econTick(t, dt, gt);
+      else this.towerFire(t, gt);
     }
     // Hero fires
-    if (this.hero) this.heroFire(this.hero, now);
+    if (this.hero) this.heroFire(this.hero, gt);
 
-    // Projectiles
-    for (const p of this.projectiles) p.update(dt, this.enemies, now);
+    // Projectiles (pass game time so hit-time status effect expiries are scaled).
+    for (const p of this.projectiles) p.update(dt, this.enemies, gt);
     this.projectiles = this.projectiles.filter(p => p.alive);
 
     // FX
@@ -579,7 +587,7 @@ export class Game {
 
     this.ui.updateStats(this);
     this.ui.updateAffordability(this.money);
-    this.ui.updateAbilityBar(this.abilityState, this.money);
+    this.ui.updateAbilityBar(this.abilityState, this.money, this.gameTime);
   }
 
   econTick(t, dt, now) {
@@ -828,7 +836,7 @@ export class Game {
 
     for (const t of this.towers) t.drawBase(ctx);
     if (this.hero) this.hero.draw(ctx);
-    for (const e of this.enemies) e.draw(ctx);
+    for (const e of this.enemies) e.draw(ctx, this.gameTime);
     for (const p of this.projectiles) p.draw(ctx);
     for (const f of this.fx) f.draw(ctx);
 

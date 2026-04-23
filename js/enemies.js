@@ -157,7 +157,7 @@ export class Enemy {
     }
   }
 
-  draw(ctx) {
+  draw(ctx, gameTime = performance.now()) {
     const t = this.type;
     ctx.save();
     if (t.alpha) ctx.globalAlpha = t.alpha;
@@ -208,7 +208,7 @@ export class Enemy {
       ctx.fillStyle = '#ff6b35';
       ctx.beginPath(); ctx.arc(this.x - s * 0.5, this.y - s * 0.7, 3, 0, Math.PI * 2); ctx.fill();
     }
-    if (performance.now() < this.stunnedUntil) {
+    if (gameTime < this.stunnedUntil) {
       ctx.globalAlpha = 0.9;
       ctx.fillStyle = '#ffd166';
       ctx.beginPath(); ctx.arc(this.x, this.y - s - 6, 3, 0, Math.PI * 2); ctx.fill();
