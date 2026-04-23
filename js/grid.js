@@ -1,27 +1,17 @@
-// Grid + path definitions. 20x20 grid.
+// Grid + path helpers. The game uses a 20x20 grid with 30px tiles.
+// Path is defined per-map as a sequence of waypoints.
 export const GRID_SIZE = 20;
 export const TILE_SIZE = 30; // canvas 600x600
 
-// Path is defined as a sequence of waypoints (grid coords).
-// Enemies walk in straight lines between waypoints.
-// Path starts at top-left edge and weaves across to the right edge.
+// Legacy default path (used by unit tests / fallback only).
 export const PATH_POINTS = [
-  { c: -1, r: 3 },
-  { c: 4, r: 3 },
-  { c: 4, r: 10 },
-  { c: 1, r: 10 },
-  { c: 1, r: 17 },
-  { c: 8, r: 17 },
-  { c: 8, r: 6 },
-  { c: 13, r: 6 },
-  { c: 13, r: 14 },
-  { c: 17, r: 14 },
-  { c: 17, r: 2 },
-  { c: 20, r: 2 },
+  { c: -1, r: 3 }, { c: 4, r: 3 }, { c: 4, r: 10 }, { c: 1, r: 10 },
+  { c: 1, r: 17 }, { c: 8, r: 17 }, { c: 8, r: 6 }, { c: 13, r: 6 },
+  { c: 13, r: 14 }, { c: 17, r: 14 }, { c: 17, r: 2 }, { c: 20, r: 2 },
 ];
 
 // Precompute the set of path tiles (grid cells the path traverses).
-export function buildPathTiles(points = PATH_POINTS) {
+export function buildPathTiles(points) {
   const set = new Set();
   for (let i = 0; i < points.length - 1; i++) {
     const a = points[i];
@@ -52,8 +42,8 @@ export function pixelToTile(px, py) {
   return { c, r };
 }
 
-// Path length cache — distance-along-path per segment, used by enemies.
-export function buildPathSegments(points = PATH_POINTS) {
+// Path-segment cache — used by enemies walking along the path.
+export function buildPathSegments(points) {
   const segs = [];
   let total = 0;
   for (let i = 0; i < points.length - 1; i++) {
@@ -66,7 +56,7 @@ export function buildPathSegments(points = PATH_POINTS) {
     segs.push({ ax, ay, bx, by, len, startDist: total });
     total += len;
   }
-  return { segments: segs, total };
+  return { segments: segs, total, points };
 }
 
 // Given a distance along the path, return {x, y} and whether we've reached the end.

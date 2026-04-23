@@ -12,11 +12,40 @@
     <div id="menu-screen" class="screen active">
       <div class="menu-card">
         <h1 class="title">Tower Rush <span>Defense</span></h1>
-        <p class="tagline">Place towers. Crush waves. Survive the bosses.</p>
+        <p class="tagline">Place towers. Crush waves. Conquer bosses.</p>
         <div class="menu-buttons">
-          <button id="btn-start" class="primary-btn">Start Game</button>
+          <button id="btn-start" class="primary-btn">New Game</button>
           <button id="btn-how" class="secondary-btn">How to Play</button>
+          <button id="btn-achievements" class="secondary-btn">Achievements</button>
+          <button id="btn-highscores" class="secondary-btn">High Scores</button>
           <button id="btn-credits" class="secondary-btn">Credits</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Setup / New Game -->
+    <div id="setup-screen" class="screen">
+      <div class="menu-card wide">
+        <h2>Choose Your Run</h2>
+        <section class="setup-section">
+          <h3>Map</h3>
+          <div id="map-picker" class="picker-grid"></div>
+        </section>
+        <section class="setup-section">
+          <h3>Difficulty</h3>
+          <div id="difficulty-picker" class="picker-grid small"></div>
+        </section>
+        <section class="setup-section">
+          <h3>Hero</h3>
+          <div id="hero-picker" class="picker-grid small"></div>
+        </section>
+        <section class="setup-section">
+          <h3>Mode</h3>
+          <label class="toggle"><input type="checkbox" id="chk-endless" /> Endless mode (survive as long as possible)</label>
+        </section>
+        <div class="menu-buttons row">
+          <button id="btn-play" class="primary-btn">Start!</button>
+          <button class="secondary-btn back-btn" data-back="menu-screen">Back</button>
         </div>
       </div>
     </div>
@@ -26,12 +55,15 @@
       <div class="menu-card">
         <h2>How to Play</h2>
         <ul class="howto">
-          <li>Click a tower in the shop, then click any non-path tile to place it.</li>
-          <li>Towers automatically shoot enemies that enter their range.</li>
-          <li>Earn money by defeating enemies; stronger enemies pay more.</li>
-          <li>Click a placed tower to see stats, upgrade it, or sell it.</li>
-          <li>Every 10th wave spawns a boss. Survive as long as you can!</li>
-          <li>Use the speed controls to fast-forward slow sections.</li>
+          <li>Pick a tower from the shop, then click any non-path tile to place it.</li>
+          <li>Towers auto-target enemies in range. Right-click or Esc cancels placement.</li>
+          <li>Click a placed tower to view stats, upgrade up to <b>Lv 5 (Paragon)</b>, sell, or change targeting (First/Last/Strong/Close).</li>
+          <li>Earn money by killing enemies and clearing waves. Stronger enemies pay more.</li>
+          <li><b>Aura towers</b> buff nearby towers; <b>Econ towers</b> generate gold; <b>Anti-Air</b> is required for flying enemies.</li>
+          <li>Spend money on <b>abilities</b> (Fireball, Ice Nova, Gold Rush, Lightning Storm). Hotkeys Q W E R.</li>
+          <li>Place a <b>Hero</b> once per run. Heroes gain XP from kills and have an active ability (hotkey H).</li>
+          <li>Every <b>10th wave</b> spawns a unique boss. Survive as long as you can!</li>
+          <li>Hotkeys: <kbd>Space</kbd> pause · <kbd>1/2/3</kbd> speed · <kbd>U</kbd> upgrade · <kbd>S</kbd> sell · <kbd>T</kbd> targeting</li>
         </ul>
         <button class="primary-btn back-btn" data-back="menu-screen">Back</button>
       </div>
@@ -42,9 +74,33 @@
       <div class="menu-card">
         <h2>Credits</h2>
         <p class="credit-line">Created by <strong>Justin Matty</strong></p>
-        <p class="credit-sub">Tower Rush Defense &mdash; A browser-based tower defense game.</p>
-        <p class="credit-sub">Built with HTML5 Canvas, CSS, and vanilla JavaScript.</p>
+        <p class="credit-sub">Tower Rush Defense &mdash; a browser-based tower defense game.</p>
+        <p class="credit-sub">Built with HTML5 Canvas, CSS, and vanilla JavaScript — no external libraries, no build step.</p>
         <button class="primary-btn back-btn" data-back="menu-screen">Back</button>
+      </div>
+    </div>
+
+    <!-- Achievements -->
+    <div id="achievements-screen" class="screen">
+      <div class="menu-card wide">
+        <h2>Achievements</h2>
+        <div id="achievements-list" class="ach-list"></div>
+        <div class="menu-buttons row">
+          <button id="btn-reset-ach" class="secondary-btn">Reset Achievements</button>
+          <button class="primary-btn back-btn" data-back="menu-screen">Back</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- High Scores -->
+    <div id="highscores-screen" class="screen">
+      <div class="menu-card wide">
+        <h2>High Scores</h2>
+        <div id="highscores-list"></div>
+        <div class="menu-buttons row">
+          <button id="btn-reset-hs" class="secondary-btn">Reset Scores</button>
+          <button class="primary-btn back-btn" data-back="menu-screen">Back</button>
+        </div>
       </div>
     </div>
 
@@ -52,7 +108,8 @@
     <div id="gameover-screen" class="screen">
       <div class="menu-card">
         <h2 id="gameover-title">Defeat!</h2>
-        <p id="gameover-stats">You survived <span id="gameover-wave">0</span> waves.</p>
+        <p id="gameover-stats">Survived <span id="gameover-wave">0</span> waves · Score <span id="gameover-score">0</span></p>
+        <p id="gameover-record" class="record"></p>
         <div class="menu-buttons">
           <button id="btn-restart" class="primary-btn">Play Again</button>
           <button class="secondary-btn back-btn" data-back="menu-screen">Main Menu</button>
@@ -79,6 +136,7 @@
           <span class="stat-label">Score</span>
           <span id="stat-score" class="stat-value">0</span>
         </div>
+        <div id="wave-preview" class="wave-preview"></div>
         <div class="controls">
           <button id="btn-speed-1" class="ctrl-btn active">1x</button>
           <button id="btn-speed-2" class="ctrl-btn">2x</button>
@@ -93,14 +151,16 @@
         <section class="canvas-wrap">
           <canvas id="game-canvas" width="600" height="600"></canvas>
           <div id="wave-banner" class="wave-banner"></div>
+          <div id="ability-bar" class="ability-bar"></div>
           <div id="tooltip" class="tooltip"></div>
         </section>
 
         <aside class="sidebar">
           <div class="shop-header">
             <h3>Tower Shop</h3>
-            <input id="tower-search" type="search" placeholder="Search towers..." />
+            <input id="tower-search" type="search" placeholder="Search..." />
           </div>
+          <div id="tower-categories" class="tower-categories"></div>
           <div id="tower-shop" class="tower-shop"></div>
 
           <div id="selected-panel" class="selected-panel hidden">
@@ -109,6 +169,15 @@
             <div class="sel-actions">
               <button id="btn-upgrade" class="primary-btn small">Upgrade</button>
               <button id="btn-sell" class="secondary-btn small">Sell</button>
+              <button id="btn-target" class="secondary-btn small">Target: FIRST</button>
+            </div>
+          </div>
+
+          <div id="hero-panel" class="selected-panel hidden">
+            <h4 id="hero-name">Hero</h4>
+            <div id="hero-stats" class="sel-stats"></div>
+            <div class="sel-actions">
+              <button id="btn-hero-ability" class="primary-btn small">Use Ability (H)</button>
             </div>
           </div>
 
