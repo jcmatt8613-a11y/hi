@@ -18,9 +18,9 @@ export default function Profile() {
 
   const isOwnRoute = !username || username === currentUser.username;
   const foundUser = !isOwnRoute ? sampleUsers.find(u => u.username === username) : undefined;
-  const isOwn = isOwnRoute || !foundUser;
-  const profileUser = isOwn ? currentUser : foundUser;
-  const userPings = pings.filter(p => p.userId === profileUser.id);
+  const isOwn = isOwnRoute;
+  const profileUser = isOwn ? currentUser : foundUser ?? null;
+  const userPings = profileUser ? pings.filter(p => p.userId === profileUser.id) : [];
 
   const startEdit = () => {
     setEditName(currentUser.displayName);
@@ -36,6 +36,17 @@ export default function Profile() {
     });
     setIsEditing(false);
   };
+
+  if (!profileUser) {
+    return (
+      <div style={{ paddingBottom: 80, textAlign: 'center', padding: '80px 20px' }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, marginBottom: 8 }}>User not found</h2>
+        <p style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
+          @{username} doesn't exist yet.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ paddingBottom: 80 }}>
