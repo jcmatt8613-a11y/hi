@@ -174,7 +174,8 @@ function ChatView({ conv, onBack }: { conv: Conversation; onBack: () => void }) 
 
 export default function Messages() {
   const { conversations } = useApp();
-  const [activeConv, setActiveConv] = useState<Conversation | null>(null);
+  const [activeConvId, setActiveConvId] = useState<string | null>(null);
+  const activeConv = activeConvId ? conversations.find(c => c.id === activeConvId) || null : null;
 
   return (
     <div style={{ paddingBottom: activeConv ? 0 : 80 }}>
@@ -187,7 +188,7 @@ export default function Messages() {
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25 }}
           >
-            <ChatView conv={activeConv} onBack={() => setActiveConv(null)} />
+            <ChatView conv={activeConv} onBack={() => setActiveConvId(null)} />
           </motion.div>
         ) : (
           <motion.div
@@ -211,7 +212,7 @@ export default function Messages() {
                 <ConversationPreview
                   key={conv.id}
                   conv={conv}
-                  onClick={() => setActiveConv(conv)}
+                  onClick={() => setActiveConvId(conv.id)}
                 />
               ))}
             </div>
