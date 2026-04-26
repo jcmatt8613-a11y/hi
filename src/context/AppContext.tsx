@@ -47,11 +47,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
     };
     setPings(prev => [newPing, ...prev]);
 
-    setUser(prev => ({
-      ...prev,
-      pingStreak: prev.pingStreak + 1,
-      lastPingDate: new Date().toISOString(),
-    }));
+    setUser(prev => {
+      const now = new Date();
+      const last = prev.lastPingDate ? new Date(prev.lastPingDate) : null;
+      const isToday = last && last.toDateString() === now.toDateString();
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const isYesterday = last && last.toDateString() === yesterday.toDateString();
+
+      let newStreak = prev.pingStreak;
+      if (isToday) {
+        // Already posted today — streak stays the same
+      } else if (isYesterday) {
+        newStreak = prev.pingStreak + 1;
+      } else {
+        newStreak = 1;
+      }
+
+      return {
+        ...prev,
+        pingStreak: newStreak,
+        lastPingDate: now.toISOString(),
+      };
+    });
   }, [user]);
 
   const toggleLike = useCallback((pingId: string) => {

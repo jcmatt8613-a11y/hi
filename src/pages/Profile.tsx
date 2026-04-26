@@ -16,8 +16,10 @@ export default function Profile() {
   const [editName, setEditName] = useState('');
   const [editBio, setEditBio] = useState('');
 
-  const isOwn = !username || username === currentUser.username;
-  const profileUser = isOwn ? currentUser : sampleUsers.find(u => u.username === username) || currentUser;
+  const isOwnRoute = !username || username === currentUser.username;
+  const foundUser = !isOwnRoute ? sampleUsers.find(u => u.username === username) : undefined;
+  const isOwn = isOwnRoute || !foundUser;
+  const profileUser = isOwn ? currentUser : foundUser;
   const userPings = pings.filter(p => p.userId === profileUser.id);
 
   const startEdit = () => {
