@@ -82,10 +82,10 @@ nav {
     repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(57,255,20,0.025) 59px, rgba(57,255,20,0.025) 60px);
 }
 .hz { position: absolute; border-radius: 50%; border: 1px solid rgba(57,255,20,0.1); animation: hz 5s ease-in-out infinite; }
-.hz:nth-child(1){width:260px;height:260px;animation-delay:0s;}
-.hz:nth-child(2){width:490px;height:490px;animation-delay:1.2s;border-color:rgba(57,255,20,0.07);}
-.hz:nth-child(3){width:760px;height:760px;animation-delay:2.4s;border-color:rgba(57,255,20,0.04);}
-.hz:nth-child(4){width:1080px;height:1080px;animation-delay:3.6s;border-color:rgba(57,255,20,0.02);}
+.hz:nth-child(2){width:260px;height:260px;animation-delay:0s;}
+.hz:nth-child(3){width:490px;height:490px;animation-delay:1.2s;border-color:rgba(57,255,20,0.07);}
+.hz:nth-child(4){width:760px;height:760px;animation-delay:2.4s;border-color:rgba(57,255,20,0.04);}
+.hz:nth-child(5){width:1080px;height:1080px;animation-delay:3.6s;border-color:rgba(57,255,20,0.02);}
 @keyframes hz{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:0.5}}
 
 .hero-tag {
@@ -1010,7 +1010,7 @@ function renderPolls(){
     container.innerHTML=data.opts.map((o,i)=>{
       const pct=Math.round(data.votes[i]/total*100);
       return`<div class="poll-opt">
-        <div class="poll-opt-bar" style="width:${votedPolls[id]?pct:0}%"></div>
+        <div class="poll-opt-bar" style="width:0%"></div>
         <button class="poll-opt-btn${votedPolls[id]&&i===votedPolls[id].choice?' voted':''}" onclick="castVote('${id}',${i})">
           <span>${o}</span>
           <span class="poll-pct">${votedPolls[id]?pct+'%':''}</span>
