@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Kris Zone – Rock Ranked. Roasted. Relived.</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --green: #39ff14;
+  --green-dim: #2acc0f;
+  --green-dark: #1a8a08;
+  --green-glow: 0 0 40px rgba(57,255,20,0.45);
+  --green-glow-big: 0 0 80px rgba(57,255,20,0.3);
+  --dark: #0a0a0a;
+  --darker: #050505;
+  --surface: #0f0f0f;
+  --surface2: #161616;
+  --surface3: #1c1c1c;
+  --border: #1e2a1a;
+  --border2: #243020;
+  --text: #e8f5e2;
+  --muted: #5a7a52;
+  --glow-text: 0 0 20px rgba(57,255,20,0.6);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--darker); color: var(--text); font-family: 'Barlow', sans-serif; overflow-x: hidden; }
+
+/* GRAIN */
+body::after {
+  content: ''; position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9998;
+}
+
+/* SCANLINES */
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 9997; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+}
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  height: 62px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; background: rgba(5,5,5,0.96);
+  backdrop-filter: blur(24px); border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; letter-spacing: 0.12em;
+  background: linear-gradient(90deg, #fff 0%, var(--green) 70%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.76rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--green); text-shadow: var(--glow-text); }
+.nav-yt {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.76rem; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  background: var(--green); color: #000; padding: 8px 22px;
+  text-decoration: none; transition: all 0.2s;
+}
+.nav-yt:hover { background: #fff; box-shadow: var(--green-glow); }
+
+/* HERO */
+#hero {
+  position: relative; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; overflow: hidden; padding: 80px 24px 60px;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 45%, rgba(57,255,20,0.07) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(57,255,20,0.04) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(57,255,20,0.025) 59px, rgba(57,255,20,0.025) 60px),
+    repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(57,255,20,0.025) 59px, rgba(57,255,20,0.025) 60px);
+}
+.hz { position: absolute; border-radius: 50%; border: 1px solid rgba(57,255,20,0.1); animation: hz 5s ease-in-out infinite; }
+.hz:nth-child(1){width:260px;height:260px;animation-delay:0s;}
+.hz:nth-child(2){width:490px;height:490px;animation-delay:1.2s;border-color:rgba(57,255,20,0.07);}
+.hz:nth-child(3){width:760px;height:760px;animation-delay:2.4s;border-color:rgba(57,255,20,0.04);}
+.hz:nth-child(4){width:1080px;height:1080px;animation-delay:3.6s;border-color:rgba(57,255,20,0.02);}
+@keyframes hz{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.05);opacity:0.5}}
+
+.hero-tag {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.78rem; font-weight: 800;
+  letter-spacing: 0.38em; text-transform: uppercase; color: var(--green);
+  margin-bottom: 22px; position: relative; z-index: 2;
+  text-shadow: var(--glow-text);
+  opacity: 0; animation: up 0.8s 0.3s forwards;
+}
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(5.5rem, 16vw, 13rem); line-height: 0.88; letter-spacing: 0.025em;
+  background: linear-gradient(150deg, #ffffff 10%, #ccffaa 45%, var(--green) 80%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  position: relative; z-index: 2; filter: drop-shadow(0 0 30px rgba(57,255,20,0.25));
+  opacity: 0; animation: up 0.9s 0.5s forwards;
+}
+.hero-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.5rem); font-weight: 400; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--muted); margin-top: 18px;
+  position: relative; z-index: 2;
+  opacity: 0; animation: up 0.8s 0.7s forwards;
+}
+.hero-desc {
+  max-width: 600px; line-height: 1.7; color: #6a8a62; margin: 24px auto 0;
+  font-size: 1rem; position: relative; z-index: 2;
+  opacity: 0; animation: up 0.8s 0.9s forwards;
+}
+.hero-btns {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+  margin-top: 42px; position: relative; z-index: 2;
+  opacity: 0; animation: up 0.8s 1.1s forwards;
+}
+/* STATS ROW */
+.hero-stats {
+  display: flex; gap: 60px; flex-wrap: wrap; justify-content: center;
+  margin-top: 60px; position: relative; z-index: 2;
+  opacity: 0; animation: up 0.8s 1.3s forwards;
+}
+.hero-stat { text-align: center; }
+.hero-stat-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2.8rem; line-height: 1;
+  color: var(--green); text-shadow: var(--glow-text);
+}
+.hero-stat-label {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.68rem;
+  font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--muted);
+  margin-top: 4px;
+}
+
+.btn {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem;
+  font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
+  padding: 14px 34px; text-decoration: none; transition: all 0.25s; display: inline-block;
+}
+.btn-green { background: var(--green); color: #000; }
+.btn-green:hover { background: #fff; box-shadow: var(--green-glow); transform: translateY(-2px); }
+.btn-outline { border: 1px solid var(--border2); color: var(--muted); }
+.btn-outline:hover { border-color: var(--green); color: var(--green); transform: translateY(-2px); box-shadow: 0 0 20px rgba(57,255,20,0.15); }
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+
+/* TICKER */
+.ticker-wrap {
+  overflow: hidden; margin-top: 70px; position: relative; z-index: 2;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 13px 0; width: 100vw;
+}
+.ticker-track { display: flex; gap: 48px; animation: ticker 32s linear infinite; white-space: nowrap; width: max-content; }
+.ticker-item { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 0.2em; color: var(--muted); flex-shrink: 0; }
+.ticker-item.hot { color: var(--green); text-shadow: var(--glow-text); }
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section { padding: 100px 0; }
+.container { max-width: 1160px; margin: 0 auto; padding: 0 40px; }
+.section-label {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 800;
+  letter-spacing: 0.4em; text-transform: uppercase; color: var(--green); margin-bottom: 12px;
+  text-shadow: var(--glow-text);
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1; letter-spacing: 0.04em;
+  background: linear-gradient(120deg, #fff 40%, #aaff88);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px;
+}
+.section-divider { width: 60px; height: 2px; background: linear-gradient(90deg, var(--green), transparent); margin-bottom: 48px; box-shadow: var(--green-glow); }
+
+/* ABOUT */
+#about { background: var(--dark); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.about-text p { color: #6a8a62; line-height: 1.8; margin-bottom: 18px; font-size: 1.05rem; }
+.about-text p strong { color: var(--text); }
+.about-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.badge {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase; border: 1px solid var(--border2);
+  color: var(--muted); padding: 6px 16px; transition: all 0.2s; cursor: default;
+}
+.badge:hover { border-color: var(--green); color: var(--green); text-shadow: var(--glow-text); box-shadow: 0 0 14px rgba(57,255,20,0.15); }
+.about-visual { position: relative; display: flex; align-items: center; justify-content: center; height: 380px; }
+.about-circle { position: absolute; border-radius: 50%; border: 1px solid; animation: spin-slow linear infinite; }
+.about-circle:nth-child(1){width:220px;height:220px;border-color:rgba(57,255,20,0.3);animation-duration:20s;}
+.about-circle:nth-child(2){width:320px;height:320px;border-color:rgba(57,255,20,0.15);animation-duration:35s;animation-direction:reverse;}
+.about-circle:nth-child(3){width:360px;height:360px;border-color:rgba(57,255,20,0.06);animation-duration:50s;}
+@keyframes spin-slow{to{transform:rotate(360deg)}}
+.about-center { position: relative; z-index: 2; text-align: center; }
+.about-center-icon { font-size: 3.5rem; line-height: 1; display: block; filter: drop-shadow(0 0 20px rgba(57,255,20,0.7)); }
+.about-center-text { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 0.25em; color: var(--green); margin-top: 10px; text-shadow: var(--glow-text); }
+
+/* HOT TAKE CAROUSEL */
+#hotzone { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 80px 0; }
+.hotzone-header { text-align: center; margin-bottom: 50px; }
+.hotzone-cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.hotzone-card {
+  background: var(--surface2); border: 1px solid var(--border2);
+  padding: 28px 24px; position: relative; overflow: hidden;
+  transition: all 0.3s; cursor: pointer;
+}
+.hotzone-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(57,255,20,0.04), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.hotzone-card:hover { border-color: var(--green); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(57,255,20,0.12); }
+.hotzone-card:hover::after { opacity: 1; }
+.hotzone-card-rank {
+  font-family: 'Bebas Neue', sans-serif; font-size: 3rem; line-height: 1;
+  color: rgba(57,255,20,0.12); position: absolute; top: 12px; right: 16px;
+  transition: color 0.3s;
+}
+.hotzone-card:hover .hotzone-card-rank { color: rgba(57,255,20,0.3); }
+.hotzone-card-label {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.62rem; font-weight: 800;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--green);
+  margin-bottom: 10px; text-shadow: var(--glow-text);
+}
+.hotzone-card-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--text); line-height: 1.3; margin-bottom: 8px; }
+.hotzone-card-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.55; }
+
+/* VIDEOS */
+#videos { background: var(--darker); }
+.videos-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.video-card {
+  background: var(--surface); border: 1px solid var(--border2); overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+.video-card:hover { transform: translateY(-6px); border-color: var(--green); box-shadow: 0 16px 50px rgba(57,255,20,0.15); }
+.video-thumb { position: relative; width: 100%; padding-top: 56.25%; overflow: hidden; background: #080808; }
+.video-thumb iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.video-info { padding: 18px 20px 20px; }
+.video-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; text-shadow: var(--glow-text); }
+.video-title { font-family: 'Barlow Condensed', sans-serif; font-size: 1.05rem; font-weight: 700; line-height: 1.3; color: var(--text); }
+.video-more { margin-top: 48px; text-align: center; }
+
+/* BRACKET */
+#bracket { background: var(--dark); }
+.bracket-intro { max-width: 640px; margin-bottom: 52px; }
+.bracket-intro p { color: #6a8a62; line-height: 1.75; font-size: 1rem; }
+.bracket-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.bracket-match {
+  background: var(--surface2); border: 1px solid var(--border2);
+  overflow: hidden; transition: border-color 0.25s;
+}
+.bracket-match:hover { border-color: var(--green); }
+.bracket-match-label {
+  background: rgba(57,255,20,0.07); padding: 10px 20px;
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem;
+  font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase;
+  color: var(--green); border-bottom: 1px solid var(--border2);
+}
+.bracket-match-body { padding: 20px; display: flex; align-items: center; gap: 16px; }
+.bracket-fighter {
+  flex: 1; text-align: center; padding: 16px 12px;
+  border: 1px solid var(--border2); font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; letter-spacing: 0.06em; color: var(--text);
+  transition: all 0.2s; cursor: pointer;
+}
+.bracket-fighter:hover { border-color: var(--green); color: var(--green); text-shadow: var(--glow-text); box-shadow: 0 0 20px rgba(57,255,20,0.1); }
+.bracket-vs {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; color: var(--green);
+  text-shadow: var(--glow-text); flex-shrink: 0;
+}
+
+/* CONTENT */
+#content { background: var(--surface); }
+.content-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+.content-card {
+  padding: 40px 32px; background: var(--surface2);
+  border: 1px solid transparent; transition: all 0.3s;
+  position: relative; overflow: hidden;
+}
+.content-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--green), transparent);
+  transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+}
+.content-card:hover::before { transform: scaleX(1); }
+.content-card:hover { border-color: var(--border2); background: var(--surface3); box-shadow: inset 0 0 30px rgba(57,255,20,0.03); }
+.content-card-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+.content-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--text); margin-bottom: 10px; }
+.content-card-desc { color: var(--muted); font-size: 0.9rem; line-height: 1.65; }
+
+/* ZONE QUIZ */
+#quiz { background: var(--darker); }
+.quiz-wrap { max-width: 720px; margin: 0 auto; }
+.quiz-q {
+  font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.6rem, 4vw, 2.5rem);
+  letter-spacing: 0.04em; color: var(--text); margin-bottom: 32px; line-height: 1.2;
+  min-height: 60px;
+}
+.quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
+.quiz-opt {
+  background: var(--surface); border: 1px solid var(--border2);
+  padding: 18px 22px; font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 600; letter-spacing: 0.08em;
+  color: var(--text); cursor: pointer; text-align: left;
+  transition: all 0.2s;
+}
+.quiz-opt:hover { border-color: var(--green); color: var(--green); box-shadow: 0 0 20px rgba(57,255,20,0.1); }
+.quiz-opt.correct { background: rgba(57,255,20,0.12); border-color: var(--green); color: var(--green); text-shadow: var(--glow-text); }
+.quiz-opt.wrong { background: rgba(255,30,30,0.1); border-color: #ff2a2a; color: #ff5555; }
+.quiz-progress { display: flex; gap: 8px; margin-bottom: 32px; }
+.quiz-pip { height: 4px; flex: 1; background: var(--border2); border-radius: 2px; transition: background 0.3s; }
+.quiz-pip.done { background: var(--green); box-shadow: 0 0 8px rgba(57,255,20,0.5); }
+.quiz-score-box { text-align: center; padding: 50px 30px; border: 1px solid var(--green); background: rgba(57,255,20,0.04); display: none; }
+.quiz-score-num { font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--green); text-shadow: var(--glow-text); line-height: 1; }
+.quiz-score-msg { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; letter-spacing: 0.1em; color: var(--muted); margin-top: 10px; }
+.quiz-restart { margin-top: 24px; }
+
+/* NOSTALGIA POLL */
+#poll { background: var(--dark); }
+.poll-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+.poll-card {
+  background: var(--surface2); border: 1px solid var(--border2); padding: 36px;
+  transition: border-color 0.25s;
+}
+.poll-card:hover { border-color: var(--green); }
+.poll-card-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 0.06em; color: var(--text); margin-bottom: 8px; }
+.poll-card-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; line-height: 1.5; }
+.poll-options { display: flex; flex-direction: column; gap: 12px; }
+.poll-opt { position: relative; overflow: hidden; }
+.poll-opt-bar {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  background: rgba(57,255,20,0.1); transition: width 0.8s ease; width: 0%;
+}
+.poll-opt-btn {
+  position: relative; z-index: 1; width: 100%; background: transparent;
+  border: 1px solid var(--border2); padding: 13px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; transition: border-color 0.2s; font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem; font-weight: 600; letter-spacing: 0.06em; color: var(--text);
+}
+.poll-opt-btn:hover { border-color: var(--green); }
+.poll-opt-btn.voted { border-color: var(--green); color: var(--green); }
+.poll-pct { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--green); text-shadow: var(--glow-text); }
+
+/* TIMELINE */
+#timeline { background: var(--surface); }
+.timeline-list { position: relative; padding-left: 48px; }
+.timeline-list::before {
+  content: ''; position: absolute; left: 7px; top: 0; bottom: 0;
+  width: 2px; background: linear-gradient(180deg, var(--green), transparent);
+  box-shadow: 0 0 8px rgba(57,255,20,0.4);
+}
+.timeline-item { position: relative; margin-bottom: 48px; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -45px; top: 8px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--darker); border: 2px solid var(--green);
+  box-shadow: 0 0 12px rgba(57,255,20,0.5);
+  transition: background 0.2s;
+}
+.timeline-item:hover::before { background: var(--green); }
+.timeline-year {
+  font-family: 'Bebas Neue', sans-serif; font-size: 0.9rem; letter-spacing: 0.2em;
+  color: var(--green); text-shadow: var(--glow-text); margin-bottom: 6px;
+}
+.timeline-event { font-family: 'Barlow Condensed', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: 0.04em; }
+.timeline-desc { color: var(--muted); font-size: 0.88rem; line-height: 1.6; max-width: 600px; }
+
+/* CONTACT */
+#contact { background: var(--darker); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.contact-info p { color: #6a8a62; line-height: 1.8; margin-bottom: 24px; font-size: 1rem; }
+.contact-detail {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 20px; border: 1px solid var(--border2); margin-bottom: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.contact-detail:hover { border-color: var(--green); box-shadow: 0 0 20px rgba(57,255,20,0.08); }
+.contact-detail-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+.contact-detail-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--green); margin-bottom: 4px; }
+.contact-detail-value { color: var(--text); font-size: 0.95rem; word-break: break-all; text-decoration: none; transition: color 0.2s; }
+.contact-detail-value:hover { color: var(--green); }
+.contact-form { display: flex; flex-direction: column; gap: 16px; }
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); }
+.form-input, .form-select, .form-textarea {
+  background: var(--surface); border: 1px solid var(--border2);
+  color: var(--text); padding: 14px 18px;
+  font-family: 'Barlow', sans-serif; font-size: 0.9rem;
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--muted); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(57,255,20,0.1); }
+.form-select { appearance: none; cursor: pointer; }
+.form-textarea { resize: vertical; min-height: 130px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.btn-submit {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.22em; text-transform: uppercase; background: var(--green); color: #000;
+  padding: 16px 36px; border: none; cursor: pointer;
+  transition: all 0.2s; align-self: flex-start;
+}
+.btn-submit:hover { background: #fff; box-shadow: var(--green-glow); transform: translateY(-2px); }
+.form-success {
+  display: none; background: rgba(57,255,20,0.07); border: 1px solid var(--green);
+  padding: 18px 22px; color: var(--green); font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.05em;
+}
+
+/* FOOTER */
+footer { background: #000; border-top: 1px solid var(--border); padding: 60px 0 40px; }
+.footer-inner { max-width: 1160px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; }
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.08em;
+  background: linear-gradient(90deg, #fff, var(--green));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 14px;
+}
+.footer-tagline { color: var(--muted); font-size: 0.9rem; line-height: 1.7; max-width: 280px; }
+.footer-col-title { font-family: 'Barlow Condensed', sans-serif; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--green); margin-bottom: 18px; text-shadow: var(--glow-text); }
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+.footer-links a:hover { color: var(--green); text-shadow: var(--glow-text); }
+.footer-bottom {
+  max-width: 1160px; margin: 40px auto 0; padding: 24px 40px 0;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+}
+.footer-email-block { display: flex; flex-direction: column; gap: 4px; }
+.footer-contact-label { font-family: 'Barlow Condensed', sans-serif; font-size: 0.65rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--green); text-shadow: var(--glow-text); }
+.footer-email { color: var(--text); font-size: 0.95rem; text-decoration: none; transition: color 0.2s; }
+.footer-email:hover { color: var(--green); text-shadow: var(--glow-text); }
+.footer-copy { color: var(--muted); font-size: 0.8rem; }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+/* RESPONSIVE */
+@media(max-width:1000px){
+  .hotzone-cards{grid-template-columns:1fr 1fr;}
+  .bracket-grid{grid-template-columns:1fr;}
+}
+@media(max-width:900px){
+  nav{padding:0 24px;} .nav-links{display:none;}
+  .about-grid,.contact-grid,.poll-grid{grid-template-columns:1fr;}
+  .about-visual{height:280px;}
+  .videos-grid{grid-template-columns:1fr 1fr;}
+  .content-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .hero-stats{gap:36px;}
+}
+@media(max-width:600px){
+  .videos-grid,.hotzone-cards,.quiz-options{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr;}
+  .container{padding:0 20px;} section{padding:70px 0;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">The Kris Zone</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#videos">Videos</a></li>
+    <li><a href="#content">Content</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://www.youtube.com/@KrisZone25" target="_blank" class="nav-yt">&#9654; Subscribe</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hz"></div><div class="hz"></div><div class="hz"></div><div class="hz"></div>
+  <p class="hero-tag">Gen X Metal &middot; Rock Commentary &middot; Hot Takes &middot; No Mercy</p>
+  <h1 class="hero-title">The Kris<br>Zone</h1>
+  <p class="hero-sub">Rock Ranked. Roasted. Relived.</p>
+  <p class="hero-desc">Metallica. Nirvana. Linkin Park. Slayer. Slipknot. If you grew up on MTV, Headbangers Ball and rock radio &mdash; this is your place. Reactions, rankings, debates and brutally honest takes on the bands that defined a generation.</p>
+  <div class="hero-btns">
+    <a href="https://www.youtube.com/@KrisZone25" target="_blank" class="btn btn-green">&#9654; Watch on YouTube</a>
+    <a href="#videos" class="btn btn-outline">Latest Videos</a>
+    <a href="#quiz" class="btn btn-outline">Take The Quiz</a>
+  </div>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-num" id="subCount">1,500+</div><div class="hero-stat-label">Subscribers</div></div>
+    <div class="hero-stat"><div class="hero-stat-num" id="vidCount">527</div><div class="hero-stat-label">Videos</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">80s-00s</div><div class="hero-stat-label">Eras Covered</div></div>
+    <div class="hero-stat"><div class="hero-stat-num">0</div><div class="hero-stat-label">Mercy Given</div></div>
+  </div>
+  <div class="ticker-wrap">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p class="section-label">About The Channel</p>
+        <h2 class="section-title">Welcome to<br>The Zone</h2>
+        <div class="section-divider"></div>
+        <p><strong>The Kris Zone</strong> is where classic rock, grunge, nu metal and 80s/90s/2000s alternative get ranked, roasted and relived. Over <strong>527 videos</strong> and <strong>1,500+ subscribers</strong> strong &mdash; and growing every week. No fluff. No filler. Just real Gen X opinions on the music that mattered.</p>
+        <p>Expect <strong>reaction videos</strong> like "Nirvana Reaction: The Best Grunge Band Isn't Who You Think," <strong>"Only ONE Survives"</strong> showdowns like Pantera vs Metallica, <strong>hot takes</strong> like "Rick Beato Is Wrong About the 90s," and deep dives into bands from Slayer to Soundgarden.</p>
+        <p>From "Rust in Peace Is So Good It Destroyed Megadeth's Career" to "The Beatles Are OVERRATED And These 5 Bands Prove It" &mdash; if you grew up on <strong>MTV</strong>, <strong>Headbangers Ball</strong> and rock radio, this channel was made for you. Hit subscribe and join the conversation.</p>
+        <div class="about-badges">
+          <span class="badge">Metallica</span><span class="badge">Nirvana</span><span class="badge">Linkin Park</span>
+          <span class="badge">Slayer</span><span class="badge">Slipknot</span><span class="badge">Tool</span>
+          <span class="badge">Pantera</span><span class="badge">Alice in Chains</span><span class="badge">Soundgarden</span>
+          <span class="badge">Megadeth</span><span class="badge">Korn</span><span class="badge">Black Sabbath</span>
+          <span class="badge">Pearl Jam</span><span class="badge">Iron Maiden</span><span class="badge">Van Halen</span>
+          <span class="badge">System of a Down</span><span class="badge">Deftones</span><span class="badge">Ozzy</span>
+        </div>
+      </div>
+      <div class="about-visual">
+        <div class="about-circle"></div>
+        <div class="about-circle"></div>
+        <div class="about-circle"></div>
+        <div class="about-center">
+          <span class="about-center-icon">&#129304;</span>
+          <div class="about-center-text">Since Gen X</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOT ZONE -->
+<section id="hotzone">
+  <div class="container">
+    <div class="hotzone-header reveal">
+      <p class="section-label">What's Burning Right Now</p>
+      <h2 class="section-title">The Hot Zone</h2>
+      <div class="section-divider" style="margin:12px auto 0;"></div>
+    </div>
+    <div class="hotzone-cards reveal">
+      <div class="hotzone-card">
+        <div class="hotzone-card-rank">01</div>
+        <div class="hotzone-card-label">&#128293; Latest Drop</div>
+        <div class="hotzone-card-title">Nirvana Reaction: The Best Grunge Band Isn't Who You Think</div>
+        <p class="hotzone-card-desc">Kris dives deep into Nirvana's catalog and makes the case that the "best grunge band" crown might belong to someone else. The comments section is on fire.</p>
+      </div>
+      <div class="hotzone-card">
+        <div class="hotzone-card-rank">02</div>
+        <div class="hotzone-card-label">&#9889; Hot Take</div>
+        <div class="hotzone-card-title">Rick Beato Is Wrong About the 90s And Here's the Proof!</div>
+        <p class="hotzone-card-desc">Kris calls out one of YouTube's biggest music channels with receipts. 90s rock was NOT what Beato says it was, and the data proves it.</p>
+      </div>
+      <div class="hotzone-card">
+        <div class="hotzone-card-rank">03</div>
+        <div class="hotzone-card-label">&#127942; Only ONE Survives</div>
+        <div class="hotzone-card-title">Pantera vs Metallica &mdash; The Heaviest Debate in Metal</div>
+        <p class="hotzone-card-desc">Two titans enter, only one survives. Kris ran the bracket and the result will make you angry. 240+ views and counting &mdash; the debate rages on.</p>
+      </div>
+      <div class="hotzone-card">
+        <div class="hotzone-card-rank">04</div>
+        <div class="hotzone-card-label">&#128308; Reaction</div>
+        <div class="hotzone-card-title">Rust in Peace Is So Good It Destroyed Megadeth's Career!</div>
+        <p class="hotzone-card-desc">The album was TOO perfect. Kris breaks down why Megadeth peaked so hard with Rust in Peace that they could never top it. 549 views can't be wrong.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VIDEOS -->
+<section id="videos">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Latest Videos</p>
+      <h2 class="section-title">Watch &amp; Listen</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="videos-grid reveal">
+      <div class="video-card">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/xFfcEPKfHJ8"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info"><p class="video-label">&#128308; Latest Drop</p><p class="video-title">Nirvana Reaction: The Best Grunge Band Isn't Who You Think</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/qIrjx3jmwrg"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info"><p class="video-label">&#127925; Deep Dive</p><p class="video-title">Van Halen: The Album That Started It All</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/8I-g2b54wvs"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info"><p class="video-label">&#9889; Hot Take</p><p class="video-title">Rick Beato Is Wrong About the 90s And Here's the Proof!</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/12rJY4IPjT8"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info"><p class="video-label">&#127942; Only ONE Survives</p><p class="video-title">Slayer Reaction: Thrash Metal vs Hair Metal &mdash; Only ONE Genre Survives</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/k02QLCgVUYY"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info"><p class="video-label">&#128165; Showdown</p><p class="video-title">Pantera vs Metallica &mdash; The Heaviest Debate in Metal | Only ONE Survives</p></div>
+      </div>
+      <div class="video-card">
+        <div class="video-thumb">
+          <iframe src="https://www.youtube.com/embed/FuuxL_buQv4"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <div class="video-info"><p class="video-label">&#128293; Reaction</p><p class="video-title">Rust in Peace Is So Good It Destroyed Megadeth's Career!</p></div>
+      </div>
+    </div>
+    <div class="video-more reveal">
+      <a href="https://www.youtube.com/@KrisZone25/videos" target="_blank" class="btn btn-outline">View All 527 Videos on YouTube &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<!-- BRACKET -->
+<section id="bracket">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Only ONE Survives</p>
+      <h2 class="section-title">Choose Your Fighter</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="bracket-intro reveal">
+      <p>These are the matchups Kris is covering on the channel. Click a fighter to vote &mdash; who do YOU think wins? From "Metallica vs Iron Maiden" to "Chester Bennington vs Fred Durst" &mdash; the community decides. No mercy, no rematch.</p>
+    </div>
+    <div class="bracket-grid reveal">
+      <div class="bracket-match">
+        <div class="bracket-match-label">&#9889; Thrash Legends</div>
+        <div class="bracket-match-body">
+          <div class="bracket-fighter" onclick="vote(this,'match1')">METALLICA</div>
+          <div class="bracket-vs">VS</div>
+          <div class="bracket-fighter" onclick="vote(this,'match1')">MEGADETH</div>
+        </div>
+      </div>
+      <div class="bracket-match">
+        <div class="bracket-match-label">&#127942; Grunge Kings</div>
+        <div class="bracket-match-body">
+          <div class="bracket-fighter" onclick="vote(this,'match2')">NIRVANA</div>
+          <div class="bracket-vs">VS</div>
+          <div class="bracket-fighter" onclick="vote(this,'match2')">ALICE IN CHAINS</div>
+        </div>
+      </div>
+      <div class="bracket-match">
+        <div class="bracket-match-label">&#128293; Nu Metal War</div>
+        <div class="bracket-match-body">
+          <div class="bracket-fighter" onclick="vote(this,'match3')">LINKIN PARK</div>
+          <div class="bracket-vs">VS</div>
+          <div class="bracket-fighter" onclick="vote(this,'match3')">SLIPKNOT</div>
+        </div>
+      </div>
+      <div class="bracket-match">
+        <div class="bracket-match-label">&#9760; Doom Division</div>
+        <div class="bracket-match-body">
+          <div class="bracket-fighter" onclick="vote(this,'match4')">BLACK SABBATH</div>
+          <div class="bracket-vs">VS</div>
+          <div class="bracket-fighter" onclick="vote(this,'match4')">PANTERA</div>
+        </div>
+      </div>
+      <div class="bracket-match">
+        <div class="bracket-match-label">&#127908; Frontman Clash</div>
+        <div class="bracket-match-body">
+          <div class="bracket-fighter" onclick="vote(this,'match5')">CHESTER BENNINGTON</div>
+          <div class="bracket-vs">VS</div>
+          <div class="bracket-fighter" onclick="vote(this,'match5')">FRED DURST</div>
+        </div>
+      </div>
+      <div class="bracket-match">
+        <div class="bracket-match-label">&#9876; Iron Bracket</div>
+        <div class="bracket-match-body">
+          <div class="bracket-fighter" onclick="vote(this,'match6')">METALLICA</div>
+          <div class="bracket-vs">VS</div>
+          <div class="bracket-fighter" onclick="vote(this,'match6')">IRON MAIDEN</div>
+        </div>
+      </div>
+    </div>
+    <p class="reveal" style="margin-top:24px;color:var(--muted);font-size:0.85rem;text-align:center;">Vote counts in your session. Head to the <a href="https://www.youtube.com/@KrisZone25" target="_blank" style="color:var(--green);text-decoration:none;">YouTube channel</a> to see Kris's official verdicts.</p>
+  </div>
+</section>
+
+<!-- CONTENT TYPES -->
+<section id="content">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:60px;">
+      <p class="section-label" style="display:flex;justify-content:center;">What You'll Find</p>
+      <h2 class="section-title" style="text-align:center;">Inside The Zone</h2>
+      <div class="section-divider" style="margin:12px auto 0;"></div>
+    </div>
+    <div class="content-grid reveal">
+      <div class="content-card"><span class="content-card-icon">&#127916;</span><div class="content-card-title">Reaction Videos</div><p class="content-card-desc">First listens, deep reacts, and real-time takes on the albums and songs that shook a generation. From Nirvana to Slipknot &mdash; no script, no filter.</p></div>
+      <div class="content-card"><span class="content-card-icon">&#127942;</span><div class="content-card-title">Only ONE Survives</div><p class="content-card-desc">Head-to-head debates where two legends enter and only one leaves. Pantera vs Metallica. Slayer vs Megadeth. Community votes decide. Chaos ensues.</p></div>
+      <div class="content-card"><span class="content-card-icon">&#9876;</span><div class="content-card-title">Nostalgia Wars</div><p class="content-card-desc">80s vs 90s. Grunge vs Nu-Metal. Era matchups that settle the debates you've been having since middle school.</p></div>
+      <div class="content-card"><span class="content-card-icon">&#128214;</span><div class="content-card-title">Rock History Deep Dives</div><p class="content-card-desc">The stories behind the music. Van Halen's debut album, Dimebag Darrell's legacy, and the moments that defined rock history.</p></div>
+      <div class="content-card"><span class="content-card-icon">&#128202;</span><div class="content-card-title">Rankings &amp; Lists</div><p class="content-card-desc">Best thrash metal bands. Elite nu-metal albums. Covers that outplayed the originals. Hot takes backed by opinions you'll either love or fight about.</p></div>
+      <div class="content-card"><span class="content-card-icon">&#127908;</span><div class="content-card-title">Video Essays</div><p class="content-card-desc">Long-form breakdowns &mdash; like why the Black Album did nothing wrong, what killed nu metal, and whether Gen Alpha just cancelled Slipknot's greatest songs.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE QUIZ -->
+<section id="quiz">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:50px;">
+      <p class="section-label" style="display:flex;justify-content:center;">Test Your Knowledge</p>
+      <h2 class="section-title" style="text-align:center;">The Kris Zone Quiz</h2>
+      <div class="section-divider" style="margin:12px auto 0;"></div>
+      <p style="color:var(--muted);margin-top:12px;font-size:0.95rem;">Think you know Gen X rock? Prove it. 10 questions. No mercy.</p>
+    </div>
+    <div class="quiz-wrap reveal">
+      <div class="quiz-progress" id="quizProgress"></div>
+      <div class="quiz-q" id="quizQ"></div>
+      <div class="quiz-options" id="quizOpts"></div>
+      <div class="quiz-score-box" id="quizScore">
+        <div class="quiz-score-num" id="quizScoreNum"></div>
+        <div class="quiz-score-msg" id="quizScoreMsg"></div>
+        <div class="quiz-restart"><button class="btn btn-green" onclick="startQuiz()" style="border:none;cursor:pointer;">Play Again &rarr;</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOSTALGIA POLL -->
+<section id="poll">
+  <div class="container">
+    <div class="reveal" style="text-align:center;margin-bottom:50px;">
+      <p class="section-label" style="display:flex;justify-content:center;">Community Votes</p>
+      <h2 class="section-title" style="text-align:center;">Nostalgia Wars Poll</h2>
+      <div class="section-divider" style="margin:12px auto 0;"></div>
+      <p style="color:var(--muted);margin-top:12px;font-size:0.95rem;">Vote on the current debates. Results update live on your screen.</p>
+    </div>
+    <div class="poll-grid reveal">
+      <div class="poll-card">
+        <div class="poll-card-title">Greatest Metal Era</div>
+        <div class="poll-card-sub">80s hair metal vs 90s grunge vs 2000s nu-metal &mdash; which era had the best bands?</div>
+        <div class="poll-options" id="poll1"></div>
+      </div>
+      <div class="poll-card">
+        <div class="poll-card-title">GOAT Frontman</div>
+        <div class="poll-card-sub">The greatest rock frontman of all time &mdash; you decide. One vote only.</div>
+        <div class="poll-options" id="poll2"></div>
+      </div>
+      <div class="poll-card">
+        <div class="poll-card-title">Best Debut Album</div>
+        <div class="poll-card-sub">First impressions matter. Which band dropped the most legendary debut?</div>
+        <div class="poll-options" id="poll3"></div>
+      </div>
+      <div class="poll-card">
+        <div class="poll-card-title">Most Underrated Band</div>
+        <div class="poll-card-sub">The bands that never got the credit they deserved. Who got robbed the hardest?</div>
+        <div class="poll-options" id="poll4"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section id="timeline">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:60px;">
+      <p class="section-label">Rock History</p>
+      <h2 class="section-title">The Gen X<br>Rock Timeline</h2>
+      <div class="section-divider"></div>
+      <p style="color:var(--muted);font-size:0.95rem;max-width:560px;">The moments that changed everything. Kris has covered them all &mdash; and has opinions about every single one.</p>
+    </div>
+    <div class="timeline-list reveal">
+      <div class="timeline-item"><div class="timeline-year">1978</div><div class="timeline-event">Van Halen Debut &mdash; The Album That Started It All</div><p class="timeline-desc">Eddie Van Halen rewrote the rulebook for guitar. Kris covered this in his deep dive: the album that launched an entire era of shred and showmanship.</p></div>
+      <div class="timeline-item"><div class="timeline-year">1983</div><div class="timeline-event">Metallica &mdash; Kill 'Em All</div><p class="timeline-desc">Thrash metal is born. Nobody was ready. The riffs hit like a freight train and everything changed.</p></div>
+      <div class="timeline-item"><div class="timeline-year">1986</div><div class="timeline-event">Master of Puppets drops</div><p class="timeline-desc">The album that many call the greatest metal record ever made. Kris has a whole video on why the Black Album couldn't top it.</p></div>
+      <div class="timeline-item"><div class="timeline-year">1990</div><div class="timeline-event">Megadeth &mdash; Rust in Peace</div><p class="timeline-desc">So good it destroyed Megadeth's career &mdash; they could never top it. Kris breaks down exactly why in one of his most-watched videos (549 views and counting).</p></div>
+      <div class="timeline-item"><div class="timeline-year">1991</div><div class="timeline-event">The Year Rock Exploded &mdash; Three Legendary Albums</div><p class="timeline-desc">Nevermind. Ten. The Black Album. All in the same year. 1991 remains untouchable. Kris has proven Rick Beato wrong about this era.</p></div>
+      <div class="timeline-item"><div class="timeline-year">1994</div><div class="timeline-event">Kurt Cobain Dies &mdash; The End of an Era</div><p class="timeline-desc">Grunge's brightest light goes out. The music world mourns and nothing sounds the same again.</p></div>
+      <div class="timeline-item"><div class="timeline-year">1996</div><div class="timeline-event">Pantera's The Great Southern Trendkill</div><p class="timeline-desc">The most brutally heavy record of the decade. Dimebag at his most unhinged. Kris pitted Pantera against Metallica in the heaviest debate in metal.</p></div>
+      <div class="timeline-item"><div class="timeline-year">2000</div><div class="timeline-event">Linkin Park &mdash; Hybrid Theory</div><p class="timeline-desc">Nu-metal meets hip-hop meets emo and becomes one of the best-selling rock albums ever. Kris covered the Chester Bennington vs Fred Durst showdown.</p></div>
+      <div class="timeline-item"><div class="timeline-year">2004</div><div class="timeline-event">Dimebag Darrell Murdered on Stage</div><p class="timeline-desc">A nightmare. The rock world unites in grief. Pantera's legacy is forever sealed in tragedy and greatness.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Get in Touch</p>
+      <h2 class="section-title">Request a Video</h2>
+      <div class="section-divider"></div>
+    </div>
+    <div class="contact-grid reveal">
+      <div class="contact-info">
+        <p>Got a band you want ranked? An album that deserves a deep dive? A "Only ONE Survives" matchup that needs settling? Send in your request and it might end up in the next video.</p>
+        <p>Collabs, feedback, business inquiries and general rock talk are all welcome too.</p>
+        <div class="contact-detail">
+          <span class="contact-detail-icon">&#128231;</span>
+          <div>
+            <p class="contact-detail-label">Email Us</p>
+            <a href="mailto:krisdrumz24@gmail.com" class="contact-detail-value">krisdrumz24@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-icon">&#9654;</span>
+          <div>
+            <p class="contact-detail-label">YouTube Channel</p>
+            <a href="https://www.youtube.com/@KrisZone25" target="_blank" class="contact-detail-value">youtube.com/@KrisZone25</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-icon">&#127908;</span>
+          <div>
+            <p class="contact-detail-label">TikTok</p>
+            <a href="https://tiktok.com/@kriszone25" target="_blank" class="contact-detail-value">tiktok.com/@kriszone25</a>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <span class="contact-detail-icon">&#129304;</span>
+          <div>
+            <p class="contact-detail-label">Response Time</p>
+            <span class="contact-detail-value">Usually within 48 hours</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Your Name</label><input type="text" class="form-input" placeholder="Rock fan name" required></div>
+            <div class="form-group"><label class="form-label">Your Email</label><input type="email" class="form-input" placeholder="your@email.com" required></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Request Type</label>
+            <select class="form-select" required>
+              <option value="" disabled selected>&mdash; Choose a type &mdash;</option>
+              <option>Reaction Video</option>
+              <option>Only ONE Survives Match</option>
+              <option>Nostalgia Wars Matchup</option>
+              <option>Album Deep Dive</option>
+              <option>Band History Video</option>
+              <option>Ranking / List</option>
+              <option>General Feedback</option>
+              <option>Collaboration</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Your Request / Message</label><textarea class="form-textarea" placeholder="Tell Kris what you want to see — which band, album, matchup, or topic?" required></textarea></div>
+          <button type="submit" class="btn-submit">Send Request &rarr;</button>
+          <div class="form-success" id="formSuccess">&#129304; Message sent! Kris will check it out.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">The Kris Zone</div>
+      <p class="footer-tagline">Metallica. Nirvana. Linkin Park. Slayer. Slipknot. Gen X metal ranked, roasted and relived &mdash; 80s, 90s, 2000s. 527 videos and counting. Hot takes. No mercy.</p>
+    </div>
+    <div>
+      <p class="footer-col-title">Navigate</p>
+      <ul class="footer-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#videos">Latest Videos</a></li>
+        <li><a href="#content">Content Types</a></li>
+        <li><a href="#quiz">Take The Quiz</a></li>
+        <li><a href="#poll">Community Polls</a></li>
+        <li><a href="#contact">Request a Video</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">The Channel</p>
+      <ul class="footer-links">
+        <li><a href="https://www.youtube.com/@KrisZone25" target="_blank">YouTube Channel</a></li>
+        <li><a href="https://www.youtube.com/@KrisZone25/videos" target="_blank">All 527 Videos</a></li>
+        <li><a href="https://tiktok.com/@kriszone25" target="_blank">TikTok</a></li>
+        <li><a href="mailto:krisdrumz24@gmail.com">Send a Message</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-email-block">
+      <span class="footer-contact-label">Contact Us At</span>
+      <a href="mailto:krisdrumz24@gmail.com" class="footer-email">krisdrumz24@gmail.com</a>
+    </div>
+    <p class="footer-copy">&copy; 2025 The Kris Zone &middot; All rights reserved &#129304;</p>
+  </div>
+</footer>
+
+<script>
+// TICKER
+const bands=['METALLICA','NIRVANA','LINKIN PARK','SLAYER','SLIPKNOT','TOOL','PANTERA','ALICE IN CHAINS','SOUNDGARDEN','PEARL JAM','MEGADETH','BLACK SABBATH','KORN','VAN HALEN','IRON MAIDEN','SYSTEM OF A DOWN','GREEN DAY','DEFTONES','OZZY OSBOURNE','DREAM THEATER'];
+const track=document.getElementById('ticker');
+[...bands,...bands].forEach((b,i)=>{
+  const el=document.createElement('span');
+  el.className='ticker-item'+(i%4===0?' hot':'');
+  el.textContent=(i%3===1?'\u26A1 ':'\u2014 ')+b;
+  track.appendChild(el);
+});
+
+// SCROLL REVEAL
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.1});
+document.querySelectorAll('.reveal,.reveal-left').forEach(r=>obs.observe(r));
+
+// COUNTER ANIMATION
+function animateCount(el,end,suffix=''){
+  let start=0,dur=2000,step=dur/60;
+  const inc=end/60;
+  const t=setInterval(()=>{
+    start+=inc; if(start>=end){start=end;clearInterval(t);}
+    el.textContent=Math.round(start).toLocaleString()+suffix;
+  },step);
+}
+const heroObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){
+  animateCount(document.getElementById('subCount'),1500,'+');
+  animateCount(document.getElementById('vidCount'),527,'');
+  heroObs.disconnect();
+}});},{threshold:0.3});
+heroObs.observe(document.getElementById('hero'));
+
+// BRACKET VOTE
+const voted={};
+function vote(el,matchId){
+  if(voted[matchId])return;
+  voted[matchId]=true;
+  const parent=el.closest('.bracket-match-body');
+  parent.querySelectorAll('.bracket-fighter').forEach(f=>{
+    f.style.cursor='default';
+    if(f===el){f.style.borderColor='var(--green)';f.style.color='var(--green)';f.style.textShadow='0 0 20px rgba(57,255,20,0.6)';}
+    else{f.style.opacity='0.35';}
+  });
+}
+
+// QUIZ — 10 questions about Gen X rock
+const questions=[
+  {q:"Which year did Metallica release 'Master of Puppets'?",opts:["1984","1986","1988","1990"],ans:1},
+  {q:"What was Nirvana's debut album?",opts:["Nevermind","Bleach","In Utero","Incesticide"],ans:1},
+  {q:"Linkin Park's 'Hybrid Theory' was released in which year?",opts:["1998","2000","2001","2003"],ans:1},
+  {q:"Which band is Chester Bennington most associated with?",opts:["Slipknot","Korn","Linkin Park","Tool"],ans:2},
+  {q:"'Reign in Blood' is considered a masterpiece by which band?",opts:["Megadeth","Pantera","Slayer","Black Sabbath"],ans:2},
+  {q:"Which 1991 album is often called 'The Black Album'?",opts:["Metallica \u2014 Metallica","Nirvana \u2014 Nevermind","Pearl Jam \u2014 Ten","Alice in Chains \u2014 Dirt"],ans:0},
+  {q:"Dimebag Darrell was the guitarist for which band?",opts:["Slayer","Megadeth","Pantera","Sepultura"],ans:2},
+  {q:"Which Megadeth album does Kris say 'destroyed their career' because it was too perfect?",opts:["Countdown to Extinction","Peace Sells","Rust in Peace","Youthanasia"],ans:2},
+  {q:"Which Soundgarden song did Kris pick as the winner in the Face-Off?",opts:["Spoonman","Black Hole Sun","Fell on Black Days","Outshined"],ans:1},
+  {q:"Eddie Van Halen is famous for pioneering which guitar technique?",opts:["Sweep picking","Two-hand tapping","Pinch harmonics","Slide guitar"],ans:1},
+];
+let qIndex=0,score=0;
+function startQuiz(){
+  qIndex=0;score=0;
+  document.getElementById('quizScore').style.display='none';
+  document.getElementById('quizQ').style.display='block';
+  document.getElementById('quizOpts').style.display='grid';
+  renderQuiz();
+}
+function renderQuiz(){
+  const pips=document.getElementById('quizProgress');
+  pips.innerHTML=questions.map((_,i)=>`<div class="quiz-pip${i<qIndex?' done':''}"></div>`).join('');
+  if(qIndex>=questions.length){showScore();return;}
+  const q=questions[qIndex];
+  document.getElementById('quizQ').textContent=q.q;
+  document.getElementById('quizOpts').innerHTML=q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="answer(${i})">${o}</button>`
+  ).join('');
+}
+function answer(i){
+  const q=questions[qIndex];
+  const btns=document.querySelectorAll('.quiz-opt');
+  btns.forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.ans)b.classList.add('correct');
+    else if(idx===i)b.classList.add('wrong');
+  });
+  if(i===q.ans)score++;
+  setTimeout(()=>{qIndex++;renderQuiz();},900);
+}
+function showScore(){
+  document.getElementById('quizQ').style.display='none';
+  document.getElementById('quizOpts').style.display='none';
+  const box=document.getElementById('quizScore');
+  box.style.display='block';
+  document.getElementById('quizScoreNum').textContent=score+'/'+questions.length;
+  const msgs=['Back to Rock 101 \uD83E\uDD26','Kris is shaking his head \uD83D\uDE24','Not bad, but you need more Zone time \uD83D\uDC4D','Solid Gen X knowledge \uD83E\uDD18','You ARE The Kris Zone! \uD83D\uDD25'];
+  const mi=score<=2?0:score<=4?1:score<=6?2:score<=8?3:4;
+  document.getElementById('quizScoreMsg').textContent=msgs[mi];
+}
+startQuiz();
+
+// POLLS
+const pollData={
+  poll1:{opts:['80s Hair Metal','90s Grunge','2000s Nu-Metal'],votes:[42,85,31]},
+  poll2:{opts:['James Hetfield','Kurt Cobain','Chester Bennington','Layne Staley'],votes:[68,72,55,41]},
+  poll3:{opts:['Kill \'Em All \u2014 Metallica','Bleach \u2014 Nirvana','Hybrid Theory \u2014 LP','Vulgar Display \u2014 Pantera'],votes:[55,38,70,44]},
+  poll4:{opts:['Alice in Chains','Soundgarden','Tool','Deftones'],votes:[60,55,48,30]},
+};
+const votedPolls={};
+function renderPolls(){
+  Object.entries(pollData).forEach(([id,data])=>{
+    const container=document.getElementById(id);
+    if(!container)return;
+    const total=data.votes.reduce((a,b)=>a+b,0);
+    container.innerHTML=data.opts.map((o,i)=>{
+      const pct=Math.round(data.votes[i]/total*100);
+      return`<div class="poll-opt">
+        <div class="poll-opt-bar" style="width:${votedPolls[id]?pct:0}%"></div>
+        <button class="poll-opt-btn${votedPolls[id]&&i===votedPolls[id].choice?' voted':''}" onclick="castVote('${id}',${i})">
+          <span>${o}</span>
+          <span class="poll-pct">${votedPolls[id]?pct+'%':''}</span>
+        </button>
+      </div>`;
+    }).join('');
+    if(votedPolls[id]){
+      setTimeout(()=>{
+        container.querySelectorAll('.poll-opt-bar').forEach((bar,i)=>{
+          const pct=Math.round(data.votes[i]/total*100);
+          bar.style.width=pct+'%';
+        });
+      },50);
+    }
+  });
+}
+function castVote(pollId,choice){
+  if(votedPolls[pollId])return;
+  votedPolls[pollId]={choice};
+  pollData[pollId].votes[choice]++;
+  renderPolls();
+}
+renderPolls();
+
+// FORM
+document.getElementById('contactForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const name=this.querySelector('input[type="text"]').value;
+  const email=this.querySelector('input[type="email"]').value;
+  const type=this.querySelector('select').value;
+  const msg=this.querySelector('textarea').value;
+  window.location.href=`mailto:krisdrumz24@gmail.com?subject=${encodeURIComponent('Video Request: '+type)}&body=${encodeURIComponent('From: '+name+' ('+email+')\n\nRequest Type: '+type+'\n\nMessage:\n'+msg)}`;
+  document.getElementById('formSuccess').style.display='block';
+  this.reset();
+});
+</script>
+</body>
+</html>
